@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=3 uid="uid://60ty82eht2x6"]
+
+[ext_resource type="Script" path="res://scripts/escena_principal.gd" id="1_6107e"]
+[ext_resource type="Texture2D" uid="uid://cwyd5csh2p1fs" path="res://sprites/background-day.png" id="1_nil4o"]
+[ext_resource type="Script" path="res://scripts/spawner.gd" id="1_tyual"]
+[ext_resource type="PackedScene" uid="uid://c0wso8qw1ejgr" path="res://escenas/bird.tscn" id="2_bh0l1"]
+[ext_resource type="Script" path="res://scripts/ui.gd" id="4_tfxl0"]
+[ext_resource type="FontFile" path="res://fonts/poco/Poco.tres" id="6_nc6fv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sioyc"]
+size = Vector2(289, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gt2b5"]
+size = Vector2(295, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_10jsf"]
+
+[node name="Escena Principal" type="Node2D"]
+script = ExtResource("1_6107e")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_nil4o")
+
+[node name="spawner" type="Marker2D" parent="."]
+position = Vector2(232, -1)
+script = ExtResource("1_tyual")
+
+[node name="Timer" type="Timer" parent="spawner"]
+wait_time = 1.7
+
+[node name="Sky" type="StaticBody2D" parent="."]
+collision_layer = 4
+
+[node name="Collision" type="CollisionShape2D" parent="Sky"]
+position = Vector2(0.5, -259.5)
+shape = SubResource("RectangleShape2D_sioyc")
+
+[node name="Death Zone" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="Collision" type="CollisionShape2D" parent="Death Zone"]
+position = Vector2(-0.5, 267)
+shape = SubResource("RectangleShape2D_gt2b5")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Bird" parent="." instance=ExtResource("2_bh0l1")]
+collision_mask = 15
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("4_tfxl0")
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 139.0
+offset_top = 7.0
+offset_right = 179.0
+offset_bottom = 127.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("6_nc6fv")
+theme_override_font_sizes/font_size = 40
+text = "0"
+
+[node name="Mensaje" type="Label" parent="CanvasLayer"]
+offset_left = 10.0
+offset_top = 182.0
+offset_right = 290.0
+offset_bottom = 232.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("6_nc6fv")
+theme_override_font_sizes/font_size = 24
+text = "¡presiona para comenzar! "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Ultima_puntuacion" type="Label" parent="CanvasLayer"]
+offset_left = -1.0
+offset_top = 399.0
+offset_right = 287.0
+offset_bottom = 449.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 5
+theme_override_fonts/font = ExtResource("6_nc6fv")
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="CanvasLayer"]
+position = Vector2(108, 230)
+scale = Vector2(22.2928, 33.4885)
+shape = SubResource("RectangleShape2D_10jsf")
+action = "ui_accept"
+
+[connection signal="timeout" from="spawner/Timer" to="spawner" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Death Zone" to="Bird" method="_on_death_zone_body_entered"]

@@ -1,0 +1,45 @@
+[gd_scene load_steps=6 format=3 uid="uid://60ty82eht2x6"]
+
+[ext_resource type="Texture2D" uid="uid://cwyd5csh2p1fs" path="res://sprites/background-day.png" id="1_nil4o"]
+[ext_resource type="Script" path="res://scripts/spawner.gd" id="1_tyual"]
+[ext_resource type="PackedScene" uid="uid://c0wso8qw1ejgr" path="res://escenas/bird.tscn" id="2_bh0l1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sioyc"]
+size = Vector2(289, 17)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gt2b5"]
+size = Vector2(295, 20)
+
+[node name="Escena Principal" type="Node2D"]
+
+[node name="spawner" type="Marker2D" parent="."]
+position = Vector2(232, -1)
+script = ExtResource("1_tyual")
+
+[node name="Timer" type="Timer" parent="spawner"]
+
+[node name="Sky" type="StaticBody2D" parent="."]
+collision_layer = 4
+
+[node name="Collision" type="CollisionShape2D" parent="Sky"]
+position = Vector2(0.5, -259.5)
+shape = SubResource("RectangleShape2D_sioyc")
+
+[node name="Death Zone" type="Area2D" parent="."]
+collision_layer = 2
+
+[node name="Collision" type="CollisionShape2D" parent="Death Zone"]
+position = Vector2(-0.5, 267)
+shape = SubResource("RectangleShape2D_gt2b5")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(6, 0)
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("1_nil4o")
+
+[node name="Bird" parent="." instance=ExtResource("2_bh0l1")]
+collision_mask = 15
+
+[connection signal="timeout" from="spawner/Timer" to="spawner" method="_on_timer_timeout"]
+[connection signal="body_entered" from="Death Zone" to="Bird" method="_on_death_zone_body_entered"]

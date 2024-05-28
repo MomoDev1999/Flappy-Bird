@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://b54ikc68gjhap"]
+
+[ext_resource type="Script" path="res://scripts/tuberia.gd" id="1_18vwv"]
+[ext_resource type="Texture2D" uid="uid://cn8q33lcn7u2x" path="res://sprites/pipe-green.png" id="1_gp03h"]
+[ext_resource type="AudioStream" uid="uid://glwbor4daykc" path="res://sounds/point.wav" id="3_o4gsb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mwi4e"]
+size = Vector2(42, 314.057)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s0ehc"]
+size = Vector2(20, 116)
+
+[node name="Tuberia" type="Area2D"]
+collision_layer = 8
+script = ExtResource("1_18vwv")
+
+[node name="Tuberia Inferior" type="Sprite2D" parent="."]
+texture = ExtResource("1_gp03h")
+
+[node name="Colision Inferior" type="CollisionShape2D" parent="."]
+position = Vector2(0.125, 0.0282667)
+shape = SubResource("RectangleShape2D_mwi4e")
+
+[node name="Tuberia Superior" type="Sprite2D" parent="."]
+position = Vector2(0, -451.971)
+rotation = -3.14047
+texture = ExtResource("1_gp03h")
+
+[node name="Colision Superior" type="CollisionShape2D" parent="."]
+position = Vector2(0.000540257, -450.982)
+rotation = -3.14047
+shape = SubResource("RectangleShape2D_mwi4e")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 8
+
+[node name="Colision Inferior2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 0.934761)
+shape = SubResource("RectangleShape2D_mwi4e")
+
+[node name="Colision Superior2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(1, -453.491)
+shape = SubResource("RectangleShape2D_mwi4e")
+
+[node name="Puntuacion" type="Area2D" parent="."]
+position = Vector2(0, -227)
+collision_layer = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Puntuacion"]
+shape = SubResource("RectangleShape2D_s0ehc")
+debug_color = Color(0.576471, 0.431373, 0.109804, 0.419608)
+
+[node name="point" type="AudioStreamPlayer2D" parent="Puntuacion"]
+stream = ExtResource("3_o4gsb")
+volume_db = -15.0
+
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]
+[connection signal="body_entered" from="Puntuacion" to="." method="_on_puntuacion_body_entered"]

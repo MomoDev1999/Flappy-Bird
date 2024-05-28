@@ -1,0 +1,70 @@
+[gd_scene load_steps=9 format=3 uid="uid://c0wso8qw1ejgr"]
+
+[ext_resource type="Texture2D" uid="uid://7f44aue5s1d" path="res://sprites/spritesheet.png" id="1_mlyhc"]
+[ext_resource type="Script" path="res://scripts/bird.gd" id="1_o5grh"]
+[ext_resource type="AudioStream" uid="uid://eu2hl20l7gyn" path="res://sounds/wing.ogg" id="3_ve0ou"]
+[ext_resource type="AudioStream" uid="uid://cb8hw2srfbybt" path="res://sounds/die.wav" id="4_o2q6l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7apb4"]
+
+[sub_resource type="Animation" id="Animation_pknyd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_st41e"]
+resource_name = "Vuelo"
+length = 0.3
+loop_mode = 1
+step = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_da1vp"]
+_data = {
+"RESET": SubResource("Animation_pknyd"),
+"Vuelo": SubResource("Animation_st41e")
+}
+
+[node name="Bird" type="CharacterBody2D"]
+script = ExtResource("1_o5grh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_7apb4")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mlyhc")
+hframes = 2
+vframes = 2
+
+[node name="AnimationPlayer2D" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_da1vp")
+}
+
+[node name="wing" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ve0ou")
+volume_db = -20.0
+
+[node name="die" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_o2q6l")
